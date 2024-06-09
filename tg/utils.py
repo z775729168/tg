@@ -190,7 +190,7 @@ def notify(
 
 def string_len_dwc(string: str) -> int:
     """Returns string len including count for double width characters"""
-    return sum(1 + (unicodedata.east_asian_width(c) in "WF") for c in string)
+    return sum(1 + (unicodedata.east_asian_width(c) in "AWF") for c in string)
 
 
 def truncate_to_len(string: str, width: int) -> str:
@@ -202,10 +202,12 @@ def truncate_to_len(string: str, width: int) -> str:
     out_string = ""
 
     for char in string:
-        cur_len += 2 if unicodedata.east_asian_width(char) in "WF" else 1
-        out_string += char
-        if cur_len >= width:
+        chr_len = 2 if unicodedata.east_asian_width(char) in "AWF" else 1
+        if cur_len + chr_len >= width:
             break
+
+        out_string += char
+        cur_len += chr_len
     return out_string
 
 
